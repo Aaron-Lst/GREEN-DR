@@ -74,7 +74,7 @@ def parse_args():
     parser.add_argument('--patience', default=5, type=int)
     parser.add_argument('--momentum', default=0.9, type=float,
                         help='momentum')
-    parser.add_argument('--weight-decay', default=1e-4, type=float,
+    parser.add_argument('--weight_decay', default=1e-4, type=float,
                         help='weight decay')
     parser.add_argument('--nesterov', default=False, type=str2bool,
                         help='nesterov')
@@ -84,6 +84,7 @@ def parse_args():
     parser.add_argument('--scale_radius', default=True, type=str2bool)
     parser.add_argument('--normalize', default=False, type=str2bool)
     parser.add_argument('--padding', default=False, type=str2bool)
+    parser.add_argument('--remove', default=False, type=str2bool)
 
     # data augmentation
     parser.add_argument('--rotate', default=True, type=str2bool)

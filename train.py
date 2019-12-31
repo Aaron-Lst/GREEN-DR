@@ -74,7 +74,7 @@ def parse_args():
     parser.add_argument('--patience', default=5, type=int)
     parser.add_argument('--momentum', default=0.9, type=float,
                         help='momentum')
-    parser.add_argument('--weight-decay', default=1e-4, type=float,
+    parser.add_argument('--weight_decay', default=1e-4, type=float,
                         help='weight decay')
     parser.add_argument('--nesterov', default=False, type=str2bool,
                         help='nesterov')
@@ -84,6 +84,7 @@ def parse_args():
     parser.add_argument('--scale_radius', default=True, type=str2bool)
     parser.add_argument('--normalize', default=False, type=str2bool)
     parser.add_argument('--padding', default=False, type=str2bool)
+    parser.add_argument('--remove', default=False, type=str2bool)
 
     # data augmentation
     parser.add_argument('--rotate', default=True, type=str2bool)
@@ -165,7 +166,7 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
         f1_scores.update(f1_score, input.size(0))
     
     print(adj_weight)
-    print(x[0:10])
+    # print(x[0:10])
     return losses.avg, scores.avg, ac_scores.avg, f1_scores.avg
 
 def validate(args, val_loader, model, criterion):
@@ -251,10 +252,7 @@ def main():
     else:
         raise NotImplementedError
 
-    # switch to benchmark model, a little forward results fluctuation, a little fast training
-    # cudnn.benchmark = True
-    # switch to deterministic model, more stable
-    cudnn.deterministic = True
+    cudnn.benchmark = True
 
     train_transform = []
     train_transform = transforms.Compose([
@@ -322,10 +320,6 @@ def main():
         for fold, (train_idx, val_idx) in enumerate(skf.split(aptos2019_img_paths, aptos2019_labels)):
             img_paths.append((aptos2019_img_paths[train_idx], aptos2019_img_paths[val_idx]))
             labels.append((aptos2019_labels[train_idx], aptos2019_labels[val_idx]))
-    # # take all diabetic_retinopathy as train_set, take all aptos2019 as val_set.
-    # elif args.train_dataset == 'diabetic_retinopathy':
-    #     img_paths = [(diabetic_retinopathy_img_paths, aptos2019_img_paths)]
-    #     labels = [(diabetic_retinopathy_labels, aptos2019_labels)]
     # take parts of diabetic_retinopathy as train_set, take the last as val_set.    
     elif args.train_dataset == 'diabetic_retinopathy':
         skf = StratifiedKFold(n_splits=args.n_splits, shuffle=True, random_state=41)
