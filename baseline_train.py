@@ -33,6 +33,7 @@ from torchvision import datasets, models, transforms
 
 from lib.dataset import Dataset
 from lib.models.model_factory import get_model
+from lib.models.resnet50 import CANet_resnet50
 from lib.utils import *
 from lib.metrics import *
 from lib.losses import *
@@ -270,10 +271,10 @@ def main():
     # switch to deterministic model, more stable
     cudnn.deterministic = True
 
-    model = get_model(model_name=args.arch,
-                      num_outputs=num_outputs,
-                      freeze_bn=args.freeze_bn,
-                      dropout_p=args.dropout_p)
+    # model = get_model(model_name=args.arch,
+    #                   num_outputs=num_outputs,
+    #                   freeze_bn=args.freeze_bn,
+    #                   dropout_p=args.dropout_p)
 
     train_transform = []
     train_transform = transforms.Compose([
@@ -461,6 +462,7 @@ def main():
                           num_outputs=num_outputs,
                           freeze_bn=args.freeze_bn,
                           dropout_p=args.dropout_p)
+        # model = CANet_resnet50()
 
         device = torch.device('cuda')
         if torch.cuda.device_count() > 1:

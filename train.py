@@ -183,7 +183,7 @@ def validate(args, val_loader, model, criterion):
             input = input.cuda()
             target = target.cuda()
 
-            output, _, adj = model(input)
+            output, adj, _ = model(input)
 
             if args.pred_type == 'classification':
                 loss = criterion(output, target)
